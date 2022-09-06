@@ -32,6 +32,7 @@ public class AppGui extends Application {
         launch();
     }
 
+
     @Override
     public void start(Stage stage) throws Exception {
 
@@ -48,23 +49,29 @@ public class AppGui extends Application {
         Scene scene1 = new Scene(layout1, 320, 280);
 
         // SHOW FLIGHTS WINDOW
-        BorderPane layout2 =new BorderPane();
-        VBox topTittle = new VBox();
-        StackPane centerTextField = new StackPane();
-        VBox bottomTittle = new VBox();
-        Button menuButton1 = new Button("Main Menu");
-        Label flightsLabel = new Label("These are the available flights");      
-        String flightsToText = App.showFlights(flights);
-        TextArea test1 = new TextArea(flightsToText);
-        topTittle.getChildren().add(flightsLabel);
-        centerTextField.getChildren().add(test1);
-        bottomTittle.getChildren().add(menuButton1);
-        topTittle.setAlignment(Pos.CENTER);
-        bottomTittle.setAlignment(Pos.CENTER);
-        layout2.setTop(topTittle);
-        layout2.setCenter(centerTextField);
-        layout2.setBottom(bottomTittle);
-        Scene scene2 = new Scene(layout2, 480, 130);
+        showButton.setOnAction(e -> {
+            BorderPane layout2 =new BorderPane();
+            VBox topTittle = new VBox();
+            StackPane centerTextField = new StackPane();
+            VBox bottomTittle = new VBox();
+            Button menuButton1 = new Button("Main Menu");
+            Label flightsLabel = new Label("These are the available flights");      
+            String flightsToText = App.showFlights(flights);
+            TextArea test1 = new TextArea(flightsToText);
+            topTittle.getChildren().add(flightsLabel);
+            centerTextField.getChildren().add(test1);
+            bottomTittle.getChildren().add(menuButton1);
+            topTittle.setAlignment(Pos.CENTER);
+            bottomTittle.setAlignment(Pos.CENTER);
+            layout2.setTop(topTittle);
+            layout2.setCenter(centerTextField);
+            layout2.setBottom(bottomTittle);
+            Scene scene2 = new Scene(layout2, 480, 130);
+            stage.setScene(scene2);
+            test1.setText(App.showFlights(flights));
+            menuButton1.setOnAction(i -> stage.setScene(scene1));
+        });
+
 
         // BOOK A FLIGHT WINDOW
         Button menuButton2 = new Button("Main Menu");
@@ -73,28 +80,20 @@ public class AppGui extends Application {
         layout3.getChildren().addAll(bookLabel, menuButton2);
         layout3.setAlignment(Pos.BASELINE_CENTER);
         Scene scene3 = new Scene(layout3, 320, 330);
-        ObservableList<String> options =
-                FXCollections.observableArrayList(
-                        "ROS",
-                        "BAS"
-                );
-        final ComboBox comboBox = new ComboBox(options);
-        layout3.getChildren().addAll(new Label("From:"),comboBox);
-        ObservableList<String> options2 =
-                FXCollections.observableArrayList(
-                        "BCN",
-                        "MDR"
-                );
-        final ComboBox comboBox2 = new ComboBox(options2);
-        layout3.getChildren().addAll(new Label("To:"),comboBox2);
+        ComboBox<String> fromComboBox = new ComboBox<>(FXCollections.observableArrayList(
+            "ROS",
+            "BAS"
+        ));
+        ComboBox<String> toComboBox = new ComboBox<>(FXCollections.observableArrayList(
+            "BCN",
+            "MDR"
+        ));
+        layout3.getChildren().addAll(new Label("From:"),fromComboBox,new Label("To:"),toComboBox);
         Button bookFlightButton = new Button("See available flights");
         Button ConfirmBookFlightButton = new Button("Book selected flight");
         layout3.getChildren().addAll(bookFlightButton);
-        ObservableList<String> options3 =
-                FXCollections.observableArrayList(
-
-                );
-        final ComboBox comboBox3 = new ComboBox(options3);
+        ObservableList<String> options3 = FXCollections.observableArrayList();
+        ComboBox<String> flightsComboBox = new ComboBox<>(options3);
 
         // CONFIRMED FLIGHTS POP UP WINDOW
 
@@ -114,24 +113,20 @@ public class AppGui extends Application {
 
 
         // FUNCTIONALITIES
-        showButton.setOnAction(e -> {
-            stage.setScene(scene2);
-            test1.setText(App.showFlights(flights));
-        });
-        menuButton1.setOnAction(e -> stage.setScene(scene1));
+        
         bookButton.setOnAction(e -> stage.setScene(scene3));
         menuButton2.setOnAction(e -> stage.setScene(scene1));
 
         bookFlightButton.setOnAction(e -> {
             layout3.getChildren().add(new Label("These are the available flights:"));
             bookFlightButton.setDisable(true);
-            fromToFilter = comboBox.getValue().toString();
-            toToFilter = comboBox2.getValue().toString();
+            fromToFilter = fromComboBox.getValue().toString();
+            toToFilter = toComboBox.getValue().toString();
             flightsList = App.filterFlights(flights, fromToFilter, toToFilter);
             System.out.println("Available flights");
             System.out.println(flightsList);
             flightsList.forEach((f) -> options3.add(f.toString()));
-            layout3.getChildren().addAll(comboBox3,ConfirmBookFlightButton);
+            layout3.getChildren().addAll(flightsComboBox,ConfirmBookFlightButton);
         });
 
         ConfirmBookFlightButton.setOnAction(e -> {
@@ -140,7 +135,7 @@ public class AppGui extends Application {
             goBackButton.setOnAction(f -> {
                 dialog.close();
                 stage.setScene(scene1);
-                String specifiedFlight = comboBox3.getValue().toString();
+                String specifiedFlight = flightsComboBox.getValue().toString();
                 System.out.println(flightsList.get(0).toString().equals(specifiedFlight));
                 App.bookFlights2(flightsList, specifiedFlight);
                 System.out.println(flightsList);
