@@ -74,36 +74,60 @@ public class AppGui extends Application {
 
 
         // BOOK A FLIGHT WINDOW
-        Button menuButton2 = new Button("Main Menu");
-        VBox layout3 = new VBox(10);
-        Label bookLabel = new Label("Book a flight:");
-        layout3.getChildren().addAll(bookLabel, menuButton2);
-        layout3.setAlignment(Pos.BASELINE_CENTER);
-        Scene scene3 = new Scene(layout3, 320, 330);
-        ComboBox<String> fromComboBox = new ComboBox<>(FXCollections.observableArrayList(
-            "ROS",
-            "BAS"
-        ));
-        ComboBox<String> toComboBox = new ComboBox<>(FXCollections.observableArrayList(
-            "BCN",
-            "MDR"
-        ));
-        layout3.getChildren().addAll(new Label("From:"),fromComboBox,new Label("To:"),toComboBox);
-        Button bookFlightButton = new Button("See available flights");
-        Button ConfirmBookFlightButton = new Button("Book selected flight");
-        layout3.getChildren().addAll(bookFlightButton);
-        ObservableList<String> options3 = FXCollections.observableArrayList();
-        ComboBox<String> flightsComboBox = new ComboBox<>(options3);
+        bookButton.setOnAction(e -> {
+            Button menuButton2 = new Button("Main Menu");
+            VBox layout3 = new VBox(10);
+            Label bookLabel = new Label("Book a flight:");
+            layout3.getChildren().addAll(bookLabel, menuButton2);
+            layout3.setAlignment(Pos.BASELINE_CENTER);
+            Scene scene3 = new Scene(layout3, 320, 330);
+            ComboBox<String> fromComboBox = new ComboBox<>(FXCollections.observableArrayList("ROS","BAS"));
+            ComboBox<String> toComboBox = new ComboBox<>(FXCollections.observableArrayList("BCN","MDR"));
+            layout3.getChildren().addAll(new Label("From:"),fromComboBox,new Label("To:"),toComboBox);
+            Button bookFlightButton = new Button("See available flights");
+            Button confirmBookFlightButton = new Button("Book selected flight");
+            layout3.getChildren().addAll(bookFlightButton);
+            ObservableList<String> options3 = FXCollections.observableArrayList();
+            ComboBox<String> flightsComboBox = new ComboBox<>(options3);    
+            stage.setScene(scene3);
+            menuButton2.setOnAction(i -> stage.setScene(scene1));
 
-        // CONFIRMED FLIGHTS POP UP WINDOW
+            bookFlightButton.setOnAction(o -> {
+                layout3.getChildren().add(new Label("These are the available flights:"));
+                bookFlightButton.setDisable(true);
+                fromToFilter = fromComboBox.getValue().toString();
+                toToFilter = toComboBox.getValue().toString();
+                flightsList = App.filterFlights(flights, fromToFilter, toToFilter);
+                System.out.println("Available flights");
+                System.out.println(flightsList);
+                flightsList.forEach((f) -> options3.add(f.toString()));
+                layout3.getChildren().addAll(flightsComboBox,confirmBookFlightButton);
+            });
+           // CONFIRMED FLIGHTS POP UP WINDOW
 
-        final Stage dialog = new Stage();
-        VBox dialogVbox = new VBox(5);
-        dialogVbox.getChildren().add(new Label("Your flight has been successfully booked!"));
-        Button goBackButton = new Button("Go back");
-        dialogVbox.getChildren().add(goBackButton);
-        dialogVbox.setAlignment(Pos.BASELINE_CENTER);
-        Scene dialogScene = new Scene(dialogVbox, 250, 70);
+            confirmBookFlightButton.setOnAction(u -> {
+                final Stage dialog = new Stage();
+                VBox dialogVbox = new VBox(5);
+                dialogVbox.getChildren().add(new Label("Your flight has been successfully booked!"));
+                Button goBackButton = new Button("Go back");
+                dialogVbox.getChildren().add(goBackButton);
+                dialogVbox.setAlignment(Pos.BASELINE_CENTER);
+                Scene dialogScene = new Scene(dialogVbox, 250, 70);
+                dialog.setScene(dialogScene);
+                dialog.show();
+                goBackButton.setOnAction(f -> {
+                    dialog.close();
+                    stage.setScene(scene1);
+                    String specifiedFlight = flightsComboBox.getValue().toString();
+                    System.out.println(flightsList.get(0).toString().equals(specifiedFlight));
+                    App.bookFlights2(flightsList, specifiedFlight);
+                    System.out.println(flightsList);
+                });
+            });
+
+        });
+
+
 
         //CANCEL A FLIGHT WINDOW
 
@@ -112,35 +136,7 @@ public class AppGui extends Application {
         exitButton.setOnAction(e -> stage.close());
 
 
-        // FUNCTIONALITIES
-        
-        bookButton.setOnAction(e -> stage.setScene(scene3));
-        menuButton2.setOnAction(e -> stage.setScene(scene1));
-
-        bookFlightButton.setOnAction(e -> {
-            layout3.getChildren().add(new Label("These are the available flights:"));
-            bookFlightButton.setDisable(true);
-            fromToFilter = fromComboBox.getValue().toString();
-            toToFilter = toComboBox.getValue().toString();
-            flightsList = App.filterFlights(flights, fromToFilter, toToFilter);
-            System.out.println("Available flights");
-            System.out.println(flightsList);
-            flightsList.forEach((f) -> options3.add(f.toString()));
-            layout3.getChildren().addAll(flightsComboBox,ConfirmBookFlightButton);
-        });
-
-        ConfirmBookFlightButton.setOnAction(e -> {
-            dialog.setScene(dialogScene);
-            dialog.show();
-            goBackButton.setOnAction(f -> {
-                dialog.close();
-                stage.setScene(scene1);
-                String specifiedFlight = flightsComboBox.getValue().toString();
-                System.out.println(flightsList.get(0).toString().equals(specifiedFlight));
-                App.bookFlights2(flightsList, specifiedFlight);
-                System.out.println(flightsList);
-            });
-        });
+        // FUNCTIONALITIES        
 
 
 
