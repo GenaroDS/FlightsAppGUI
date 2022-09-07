@@ -2,8 +2,10 @@ package com.example;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class App  {
-
+public class App {
+    private App() {
+        throw new IllegalStateException("Functionality class");
+      }
     public static void bookFlights(ArrayList<Airplane> flights, Scanner scanner, ArrayList<TicketGenerator> tickets){
         System.out.println("Where do you want to travel?");
         String destination = scanner.nextLine();

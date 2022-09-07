@@ -1,24 +1,15 @@
 package com.example;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.Stack;
-
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 public class AppGui extends Application {
     public static ArrayList<Airplane> flights;
