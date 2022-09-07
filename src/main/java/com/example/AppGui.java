@@ -23,30 +23,30 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class AppGui extends Application {
     public static ArrayList<Airplane> flights;
     public static ArrayList<Airplane> flightsList;
+    public static ArrayList<TicketGenerator> tickets;
     public String fromToFilter;
     public String toToFilter;
-    public static HashMap<String, String> tickets;
     public static void main(String[] args) {
         flights = App.initialize();
+        tickets = new ArrayList<>();    
         flights.forEach(Airplane::prepareSeats);
+            
         launch();
     }
 
 
     @Override
     public void start(Stage stage) throws Exception {
-
         // PRIMARY WINDOW
         Label welcomeLabel = new Label("Welcome to FlightsApps");
         Button showButton = new Button("Show all Flights");
         Button bookButton = new Button("Book a flight");
         Button cancelButton = new Button("Cancel a flight");
-        Button consultButton = new Button("Consult a flight");
         Button exitButton = new Button("Exit Application");
         VBox layout1 =new VBox(20);
         layout1.setAlignment(Pos.BASELINE_CENTER);
-        layout1.getChildren().addAll(welcomeLabel,showButton,bookButton,cancelButton,consultButton, exitButton);
-        Scene scene1 = new Scene(layout1, 320, 280);
+        layout1.getChildren().addAll(welcomeLabel,showButton,bookButton,cancelButton, exitButton);
+        Scene scene1 = new Scene(layout1, 320, 240);
 
         // SHOW FLIGHTS WINDOW
         showButton.setOnAction(e -> {
@@ -72,7 +72,6 @@ public class AppGui extends Application {
             menuButton1.setOnAction(i -> stage.setScene(scene1));
         });
 
-
         // BOOK A FLIGHT WINDOW
         bookButton.setOnAction(e -> {
             Button menuButton2 = new Button("Main Menu");
@@ -91,20 +90,17 @@ public class AppGui extends Application {
             ComboBox<String> flightsComboBox = new ComboBox<>(options3);    
             stage.setScene(scene3);
             menuButton2.setOnAction(i -> stage.setScene(scene1));
-
+            // BOOK THE FLIGHT FUNCTIONALITY
             bookFlightButton.setOnAction(o -> {
                 layout3.getChildren().add(new Label("These are the available flights:"));
                 bookFlightButton.setDisable(true);
                 fromToFilter = fromComboBox.getValue().toString();
                 toToFilter = toComboBox.getValue().toString();
                 flightsList = App.filterFlights(flights, fromToFilter, toToFilter);
-                System.out.println("Available flights");
-                System.out.println(flightsList);
                 flightsList.forEach((f) -> options3.add(f.toString()));
                 layout3.getChildren().addAll(flightsComboBox,confirmBookFlightButton);
             });
            // CONFIRMED FLIGHTS POP UP WINDOW
-
             confirmBookFlightButton.setOnAction(u -> {
                 final Stage dialog = new Stage();
                 VBox dialogVbox = new VBox(5);
@@ -120,26 +116,35 @@ public class AppGui extends Application {
                     stage.setScene(scene1);
                     String specifiedFlight = flightsComboBox.getValue().toString();
                     System.out.println(flightsList.get(0).toString().equals(specifiedFlight));
-                    App.bookFlights2(flightsList, specifiedFlight);
-                    System.out.println(flightsList);
+                    App.bookFlights2(flightsList, specifiedFlight, tickets);
                 });
             });
-
         });
 
-
-
         //CANCEL A FLIGHT WINDOW
-
+        cancelButton.setOnAction(e ->{
+            Button menuButton = new Button("Main Menu");
+            Button confirmCancel = new Button("Cancel selected flight");
+            VBox layout = new VBox(10);
+            layout.setAlignment(Pos.BASELINE_CENTER);
+            Scene scene3 = new Scene(layout, 320, 150);
+            ObservableList<String> options = FXCollections.observableArrayList();
+            ComboBox<String> flightsComboBox = new ComboBox<>(options);
+            tickets.forEach((f) -> options.add(f.toString()));
+            layout.getChildren().addAll(new Label("These are your booked flights:"),flightsComboBox);
+            layout.getChildren().addAll(confirmCancel,menuButton);
+        
+            stage.setScene(scene3);
+            menuButton.setOnAction(i -> stage.setScene(scene1));
+        });
 
         // EXIT
-        exitButton.setOnAction(e -> stage.close());
-
+        exitButton.setOnAction(e -> {
+            stage.close();
+        });
+        
 
         // FUNCTIONALITIES        
-
-
-
 
         stage.setTitle("FlightsApp");
         stage.setScene(scene1);

@@ -18,6 +18,39 @@ public class Airplane {
         this.seats = new ArrayList<>();
     }
 
+    public void reserveSeat(ArrayList<TicketGenerator> tickets){
+        int i = 0;
+        boolean state = false;
+        while (i < this.seats.size()){
+            if (this.seats.get(i).isAvailable()){
+                this.seats.get(i).reserveSeat();
+                state = true;
+                break;
+            }
+            i++;
+        }
+        if (state) {
+            TicketGenerator ticketer = new TicketGenerator(this.planeId, this.seats.get(i));
+            String ticket = ticketer.generateTicket();
+            System.out.println( "Seat successfully reserved, your ticket ID number is: #" + ticket);
+            tickets.add(ticketer);
+        } else {
+            System.out.println("The flight is full");
+        }
+    }
+
+    public void cancelReservedSeat(String number){
+        int i = 0;
+        int Inumber = Integer.valueOf(number);
+        while (i <= this.seats.size()-1){
+            if (this.seats.get(i).getSeatNumber() == (Inumber)){
+                this.seats.get(i).cancelSeat();
+            }
+            i++;
+        }
+    }
+
+
     public String getPlaneId() {
         return planeId;
     }
@@ -50,37 +83,6 @@ public class Airplane {
             }
         }
         return true;
-    }
-
-    public void reserveSeat(){
-        int i = 0;
-        boolean state = false;
-        while (i < this.seats.size()){
-            if (this.seats.get(i).isAvailable()){
-                this.seats.get(i).reserveSeat();
-                state = true;
-                break;
-            }
-            i++;
-        }
-        if (state) {
-            TicketGenerator ticketer = new TicketGenerator(this.planeId, this.seats.get(i));
-            String ticket = ticketer.generateTicket();
-            System.out.println( "Seat successfully reserved, your ticket ID number is: #" + ticket);
-        } else {
-            System.out.println("The flight is full");
-        }
-    }
-
-    public void cancelReservedSeat(String number){
-        int i = 0;
-        int Inumber = Integer.valueOf(number);
-        while (i <= this.seats.size()-1){
-            if (this.seats.get(i).getSeatNumber() == (Inumber)){
-                this.seats.get(i).cancelSeat();
-            }
-            i++;
-        }
     }
 
     public int availableSeats(){
