@@ -141,7 +141,11 @@ public class AppGui extends Application {
                 Scene dialogScene = new Scene(dialogVbox, 250, 70);
                 dialog.setScene(dialogScene);
                 dialog.show();
-                mainMenu.setOnAction(a -> stage.setScene(scene1));
+                mainMenu.setOnAction(a -> {
+                    dialog.close();
+                    stage.setScene(scene1);                    
+                });
+                
             });
             stage.setScene(scene3);
             menuButton.setOnAction(i -> stage.setScene(scene1));
@@ -167,7 +171,7 @@ public class AppGui extends Application {
         System.out.println(trys.equals(ticket));
         int i = 0;
         String ticketToString = "";
-        while ( i <= tickets.size()){
+        while ( i < tickets.size()){
             ticketToString = tickets.get(i).toString();
             if (ticketToString.equals(ticket)){
                 tickets.remove(i);
