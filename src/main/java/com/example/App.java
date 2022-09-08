@@ -40,6 +40,17 @@ public class App {
         }
     }
 
+    public static void cancelFlights(ArrayList<Airplane> flights, String planeId, String seatId){        
+        int i = 0;
+        while (i <= flights.size()-1){
+            if (flights.get(i).getPlaneId().equals(planeId)){
+                flights.get(i).cancelReservedSeat(seatId);
+                System.out.println("You flight has been succesfully canceled.");
+            }
+            i++;
+        }
+    }
+
     public static String showFlights(ArrayList<Airplane> flights){
         StringBuilder toReturn = new StringBuilder();
         for (Airplane plane : flights){
@@ -48,23 +59,6 @@ public class App {
         }
         return new String(toReturn);
     }
-
-
-    public static void cancelFlights(ArrayList<Airplane> flights, Scanner scanner){        
-        System.out.println("Insert the ID of the desired ticket to cancel.");
-        String ticketToCancel = scanner.nextLine();
-        String flightId = ticketToCancel.substring(1, 4);
-        String seatId = ticketToCancel.substring(4);
-        int i = 0;
-        while (i <= flights.size()-1){
-            if (flights.get(i).getPlaneId().equals(flightId)){
-                flights.get(i).cancelReservedSeat(seatId);
-                System.out.println("You flight has been succesfully canceled.");
-            }
-            i++;
-        }
-    }
-
 
     public static ArrayList<Airplane> initialize(){
         Airplane flight1 = new Airplane("001", "Fly Emirates", "ROS", "BCN", 2);

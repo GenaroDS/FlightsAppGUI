@@ -124,7 +124,25 @@ public class AppGui extends Application {
             tickets.forEach((f) -> options.add(f.toString()));
             layout.getChildren().addAll(new Label("These are your booked flights:"),flightsComboBox);
             layout.getChildren().addAll(confirmCancel,menuButton);
-        
+            confirmCancel.setOnAction(u -> {
+                String ticketName = flightsComboBox.getValue();
+                String flightID = ticketName.substring(11,14);
+                String seatID = ticketName.substring(28) ;
+                System.out.println(flightID);
+                System.out.println(seatID);
+                App.cancelFlights(flights, flightID, seatID);    
+                ticketEraser(tickets,ticketName);
+                final Stage dialog = new Stage();
+                VBox dialogVbox = new VBox(5);
+                dialogVbox.getChildren().add(new Label("Your flight has been successfully cancelled!"));
+                Button mainMenu = new Button("Main menu");
+                dialogVbox.getChildren().add(mainMenu);
+                dialogVbox.setAlignment(Pos.BASELINE_CENTER);
+                Scene dialogScene = new Scene(dialogVbox, 250, 70);
+                dialog.setScene(dialogScene);
+                dialog.show();
+                mainMenu.setOnAction(a -> stage.setScene(scene1));
+            });
             stage.setScene(scene3);
             menuButton.setOnAction(i -> stage.setScene(scene1));
         });
@@ -143,6 +161,19 @@ public class AppGui extends Application {
 
     }
 
-
+    public void ticketEraser(ArrayList<TicketGenerator> tickets, String ticket){
+        System.out.println(tickets);
+        String trys = tickets.get(0).toString();
+        System.out.println(trys.equals(ticket));
+        int i = 0;
+        String ticketToString = "";
+        while ( i <= tickets.size()){
+            ticketToString = tickets.get(i).toString();
+            if (ticketToString.equals(ticket)){
+                tickets.remove(i);
+            }
+            i++;
+        }        
+    }
 
 }
