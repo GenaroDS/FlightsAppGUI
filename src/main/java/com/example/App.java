@@ -45,7 +45,6 @@ public class App {
         while (i <= flights.size()-1){
             if (flights.get(i).getPlaneId().equals(planeId)){
                 flights.get(i).cancelReservedSeat(seatId);
-                System.out.println("You flight has been succesfully canceled.");
             }
             i++;
         }

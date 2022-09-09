@@ -136,11 +136,10 @@ public class AppGui extends Application {
                     dialog.show();
                     closeButton.setOnAction(f -> dialog.close());
                 }
-
             });
         });
 
-        //CANCEL A FLIGHT WINDOW
+        // CANCEL A FLIGHT WINDOW
         cancelButton.setOnAction(e ->{
             Button menuButton = new Button("Main Menu");
             Button confirmCancel = new Button("Cancel selected flight");
@@ -153,27 +152,38 @@ public class AppGui extends Application {
             layout.getChildren().addAll(new Label("These are your booked flights:"),flightsComboBox);
             layout.getChildren().addAll(confirmCancel,menuButton);
             confirmCancel.setOnAction(u -> {
-                String ticketName = flightsComboBox.getValue();
-                String flightID = ticketName.substring(11,14);
-                String seatID = ticketName.substring(28) ;
-                System.out.println(flightID);
-                System.out.println(seatID);
-                App.cancelFlights(flights, flightID, seatID);    
-                ticketEraser(tickets,ticketName);
-                final Stage dialog = new Stage();
-                VBox dialogVbox = new VBox(5);
-                dialogVbox.getChildren().add(new Label("Your flight has been successfully cancelled!"));
-                Button mainMenu = new Button("Main menu");
-                dialogVbox.getChildren().add(mainMenu);
-                dialogVbox.setAlignment(Pos.BASELINE_CENTER);
-                Scene dialogScene = new Scene(dialogVbox, 250, 70);
-                dialog.setScene(dialogScene);
-                dialog.show();
-                mainMenu.setOnAction(a -> {
-                    dialog.close();
-                    stage.setScene(scene1);                    
-                });
-                
+                // CHECK IF THERE'S A SELECTED VALUE, IF THERE'S NOT, DIALOG WINDOW WILL POP UP
+                if (flightsComboBox.getValue() == null){
+                    final Stage dialog = new Stage();
+                    VBox dialogVbox = new VBox(5);
+                    dialogVbox.getChildren().add(new Label("Please select a ticket to cancel"));
+                    Button closeButton = new Button("Close");
+                    dialogVbox.getChildren().add(closeButton);
+                    dialogVbox.setAlignment(Pos.BASELINE_CENTER);
+                    Scene dialogScene = new Scene(dialogVbox, 250, 70);
+                    dialog.setScene(dialogScene);
+                    dialog.show();
+                    closeButton.setOnAction(f -> dialog.close());
+                }else{// IF THERE'S IS A VALUE, CENCEL THE TICKET
+                    String ticketName = flightsComboBox.getValue();
+                    String flightID = ticketName.substring(11,14);
+                    String seatID = ticketName.substring(28) ;
+                    App.cancelFlights(flights, flightID, seatID);    
+                    ticketEraser(tickets,ticketName);
+                    final Stage dialog = new Stage();
+                    VBox dialogVbox = new VBox(5);
+                    dialogVbox.getChildren().add(new Label("Your flight has been successfully cancelled!"));
+                    Button mainMenu = new Button("Main menu");
+                    dialogVbox.getChildren().add(mainMenu);
+                    dialogVbox.setAlignment(Pos.BASELINE_CENTER);
+                    Scene dialogScene = new Scene(dialogVbox, 250, 70);
+                    dialog.setScene(dialogScene);
+                    dialog.show();
+                    mainMenu.setOnAction(a -> {
+                        dialog.close();
+                        stage.setScene(scene1);                    
+                    });
+                }
             });
             stage.setScene(scene3);
             menuButton.setOnAction(i -> stage.setScene(scene1));

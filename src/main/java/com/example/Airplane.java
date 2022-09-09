@@ -31,8 +31,6 @@ public class Airplane {
         }
         if (state) {
             TicketGenerator ticketer = new TicketGenerator(this.planeId, this.seats.get(i));
-            String ticket = ticketer.generateTicket();
-            System.out.println( "Seat successfully reserved, your ticket ID number is: #" + ticket);
             tickets.add(ticketer);
         } else {
             System.out.println("The flight is full");

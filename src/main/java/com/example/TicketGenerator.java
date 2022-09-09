@@ -18,7 +18,7 @@ public class TicketGenerator {
     }
 
     public String toString(){
-        return "Flight ID: " + this.flightID + " Seat Number: " + this.seat.getSeatNumber();
+        return "Ticket Number:" + this.flightID + " Seat Number: " + this.seat.getSeatNumber();
     }
 
 }
