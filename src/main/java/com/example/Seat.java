@@ -12,6 +12,7 @@ public class Seat {
     public int getSeatNumber() {
         return seatNumber;
     }
+    
     public boolean isAvailable(){
         return available;
     }
@@ -22,13 +23,5 @@ public class Seat {
 
     public void cancelSeat(){
         this.available = true;
-    }
-
-    public String toString(){
-        if (isAvailable()){
-            return "Seat number: " + this.seatNumber + " is available";
-        } else{
-            return "Seat number: " + this.seatNumber + " is not available";
-        }
     }
 }

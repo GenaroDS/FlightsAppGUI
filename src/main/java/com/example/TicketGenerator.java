@@ -8,6 +8,15 @@ public class TicketGenerator {
     private String to;
     private String airline;
 
+    public TicketGenerator(String flightID, Seat seat){
+        this.ticket = "";
+        this.flightID = flightID;
+        this.seat = seat;
+        this.from = "";
+        this.to = "";  
+        this.airline = "";    
+    }
+
     public void setFrom(String from) {
         this.from = from;
     }
@@ -30,15 +39,6 @@ public class TicketGenerator {
 
     public String getSeat(){
         return Integer.toString(this.seat.getSeatNumber());
-    }
-
-    public TicketGenerator(String flightID, Seat seat){
-        this.ticket = "";
-        this.flightID = flightID;
-        this.seat = seat;
-        this.from = "";
-        this.to = "";  
-        this.airline = "";    
     }
 
     public String generateTicket(){

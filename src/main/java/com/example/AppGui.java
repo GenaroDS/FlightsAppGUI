@@ -1,5 +1,6 @@
 package com.example;
 import java.util.ArrayList;
+import java.util.List;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,19 +13,17 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class AppGui extends Application {
-    public static ArrayList<Airplane> flights;
-    public static ArrayList<Airplane> flightsList;
-    public static ArrayList<TicketGenerator> tickets;
+    public static List<Airplane> flights;
+    public static List<Airplane> flightsList;
+    public static List<TicketGenerator> tickets;
     public String fromToFilter;
     public String toToFilter;
     public static void main(String[] args) {
         flights = App.initialize();
         tickets = new ArrayList<>();    
-        flights.forEach(Airplane::prepareSeats);
-            
+        flights.forEach(Airplane::prepareSeats);            
         launch();
     }
-
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -205,13 +204,13 @@ public class AppGui extends Application {
 
     }
 
-    public void ticketEraser(ArrayList<TicketGenerator> tickets, String ticket){
+    public void ticketEraser(List<TicketGenerator> tickets2, String ticket){
         int i = 0;
         String ticketToString = "";
-        while ( i < tickets.size()){
-            ticketToString = tickets.get(i).toString();
+        while ( i < tickets2.size()){
+            ticketToString = tickets2.get(i).toString();
             if (ticketToString.equals(ticket)){
-                tickets.remove(i);
+                tickets2.remove(i);
             }
             i++;
         }        
