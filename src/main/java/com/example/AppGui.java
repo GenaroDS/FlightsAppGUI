@@ -123,7 +123,7 @@ public class AppGui extends Application {
                     fromComboBox.setDisable(true);
                     toComboBox.setDisable(true);
                     String specifiedFlight = flightsComboBox.getValue().toString();
-                    App.bookFlights2(flightsList, specifiedFlight, tickets);
+                    App.bookFlights2(flightsList, specifiedFlight, tickets);                
                     mainMenuButton.setOnAction(f -> {
                         dialog.close();
                         stage.setScene(scene1);                            
@@ -145,7 +145,7 @@ public class AppGui extends Application {
             Button confirmCancel = new Button("Cancel selected flight");
             VBox layout = new VBox(10);
             layout.setAlignment(Pos.BASELINE_CENTER);
-            Scene scene3 = new Scene(layout, 320, 150);
+            Scene scene3 = new Scene(layout, 340, 150);
             ObservableList<String> options = FXCollections.observableArrayList();
             ComboBox<String> flightsComboBox = new ComboBox<>(options);
             tickets.forEach((f) -> options.add(f.toString()));
@@ -166,8 +166,9 @@ public class AppGui extends Application {
                     closeButton.setOnAction(f -> dialog.close());
                 }else{// IF THERE'S IS A VALUE, CENCEL THE TICKET
                     String ticketName = flightsComboBox.getValue();
-                    String flightID = ticketName.substring(11,14);
-                    String seatID = ticketName.substring(28) ;
+                    String[] newTicketName = ticketName.split("@");
+                    String flightID = newTicketName[0].toString().substring(16,19);
+                    String seatID = newTicketName[0].toString().substring(19);
                     App.cancelFlights(flights, flightID, seatID);    
                     ticketEraser(tickets,ticketName);
                     final Stage dialog = new Stage();
@@ -191,6 +192,7 @@ public class AppGui extends Application {
 
         // EXIT
         exitButton.setOnAction(e -> {
+            System.out.println(tickets);
             stage.close();
         });
         
@@ -204,9 +206,6 @@ public class AppGui extends Application {
     }
 
     public void ticketEraser(ArrayList<TicketGenerator> tickets, String ticket){
-        System.out.println(tickets);
-        String trys = tickets.get(0).toString();
-        System.out.println(trys.equals(ticket));
         int i = 0;
         String ticketToString = "";
         while ( i < tickets.size()){

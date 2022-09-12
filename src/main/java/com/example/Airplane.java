@@ -1,5 +1,6 @@
 package com.example;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Airplane {
     private String planeId;
@@ -18,7 +19,7 @@ public class Airplane {
         this.seats = new ArrayList<>();
     }
 
-    public void reserveSeat(ArrayList<TicketGenerator> tickets){
+    public void reserveSeat(List<TicketGenerator> tickets){
         int i = 0;
         boolean state = false;
         while (i < this.seats.size()){
@@ -31,6 +32,10 @@ public class Airplane {
         }
         if (state) {
             TicketGenerator ticketer = new TicketGenerator(this.planeId, this.seats.get(i));
+            ticketer.setAirline(this.airline);
+            ticketer.setFrom(this.from);
+            ticketer.setTo(this.to);
+            ticketer.generateTicket();
             tickets.add(ticketer);
         } else {
             System.out.println("The flight is full");
@@ -40,6 +45,7 @@ public class Airplane {
     public void cancelReservedSeat(String number){
         int i = 0;
         int Inumber = Integer.valueOf(number);
+        System.out.println("Seat number: " + number);
         while (i <= this.seats.size()-1){
             if (this.seats.get(i).getSeatNumber() == (Inumber)){
                 this.seats.get(i).cancelSeat();
