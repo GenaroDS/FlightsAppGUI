@@ -38,7 +38,7 @@ public class App {
         flightsList = newList;
     }
 
-    public static void bookFlights2(String flight) {
+    public static void bookFlights(String flight) {
         if (!(flights.isEmpty())) {
             int index = 0;
             while (index <= flights.size() - 1) {

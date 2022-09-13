@@ -121,7 +121,7 @@ public class AppGui extends Application {
                     fromComboBox.setDisable(true);
                     toComboBox.setDisable(true);
                     String specifiedFlight = flightsComboBox.getValue().toString();
-                    App.bookFlights2(specifiedFlight); //                 
+                    App.bookFlights(specifiedFlight); //                 
                     mainMenuButton.setOnAction(f -> {
                         dialog.close();
                         stage.setScene(scene1);                            
