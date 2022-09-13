@@ -7,17 +7,17 @@ public class App {
         throw new IllegalStateException("Functionality class");
       }
 
-    public static List<Airplane> initialize(){
+    public static void initialize(List<Airplane> flights){
         Airplane flight1 = new Airplane("001", "Fly Emirates", "ROS", "BCN", 2);
         Airplane flight2 = new Airplane("002", "Fly Emirates", "BAS", "BCN", 30);
         Airplane flight3 = new Airplane("003", "Fly Bondi", "ROS", "MDR", 20);
         Airplane flight4 = new Airplane("004", "Fly Bondi", "BAS", "MDR", 30);
-        ArrayList<Airplane> flights = new ArrayList<>();
         flights.add(flight1);
         flights.add(flight2);
         flights.add(flight3);
         flights.add(flight4);
-        return flights;
+        flights.forEach(Airplane::prepareSeats);
+
     }
 
     public static List<Airplane> filterFlights(List<Airplane> flights, String from, String to){

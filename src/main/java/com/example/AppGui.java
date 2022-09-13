@@ -13,16 +13,16 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class AppGui extends Application {
-    public static List<Airplane> flights;
+    private static List<Airplane> flights;
     public static List<Airplane> flightsList;
     public static List<TicketGenerator> tickets;
-    public String fromToFilter;
-    public String toToFilter;
+
     public static void main(String[] args) {
-        flights = App.initialize();
-        tickets = new ArrayList<>();    
-        flights.forEach(Airplane::prepareSeats);            
+        tickets = new ArrayList<>();
+        flights = new ArrayList<>();
+        App.initialize(flights);
         launch();
+        
     }
 
     @Override
@@ -91,8 +91,8 @@ public class AppGui extends Application {
                     showFlightsButton.setDisable(true);  
                     fromComboBox.setDisable(true);   
                     toComboBox.setDisable(true);           
-                    fromToFilter = fromComboBox.getValue().toString();
-                    toToFilter = toComboBox.getValue().toString();
+                    String fromToFilter = fromComboBox.getValue().toString();
+                    String toToFilter = toComboBox.getValue().toString();
                     flightsList = App.filterFlights(flights, fromToFilter, toToFilter);
                     flightsList.forEach((f) -> options3.add(f.toString()));
                     layout3.getChildren().addAll(flightsComboBox,confirmBookFlightButton);
@@ -197,7 +197,6 @@ public class AppGui extends Application {
             System.out.println(tickets);
             stage.close();
         });
-
     }
 
     public void ticketEraser(List<TicketGenerator> tickets2, String ticket){
