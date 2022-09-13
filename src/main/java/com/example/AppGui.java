@@ -113,7 +113,10 @@ public class AppGui extends Application {
                 dialogVbox.getChildren().add(mainMenuButton);
                 dialogVbox.setAlignment(Pos.BASELINE_CENTER);
                 Scene dialogScene = new Scene(dialogVbox, 250, 70);
-                if (flightsComboBox.getValue() != null){
+                String[] seatsAvailableString = flightsComboBox.getValue().split("Seats available: ");
+                int seatsAvailable = Integer.valueOf(seatsAvailableString[1]);
+                System.out.println(seatsAvailable);
+                if (flightsComboBox.getValue() != null && seatsAvailable > 0){
                     dialog.setScene(dialogScene);
                     dialog.show();
                     fromComboBox.setDisable(true);
@@ -124,7 +127,18 @@ public class AppGui extends Application {
                         dialog.close();
                         stage.setScene(scene1);                            
                     });
-                } else {
+                } else if (seatsAvailable == 0){
+                    dialogVbox.getChildren().clear();
+                    Button closeButton = new Button("Close");
+                    dialogVbox.getChildren().addAll(new Label("The selected flight has no seats avaiables."), closeButton);
+                    dialog.setScene(dialogScene);   
+                    dialog.show();
+                    closeButton.setOnAction(f ->{
+                        dialog.close();
+                        stage.setScene(scene1);
+                    }); 
+                }
+                else {
                     dialogVbox.getChildren().clear();
                     Button closeButton = new Button("Close");
                     dialogVbox.getChildren().addAll(new Label("Please select your desired flight!"), closeButton);
