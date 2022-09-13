@@ -13,16 +13,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class AppGui extends Application {
-    private static List<Airplane> flights;
-    public static List<Airplane> flightsList;
-    public static List<TicketGenerator> tickets;
 
-    public static void main(String[] args) {
-        tickets = new ArrayList<>();
-        flights = new ArrayList<>();
-        App.initialize(flights);
-        launch();
-        
+    public static void main(String[] args) {        
+        App.initialize();        
+        launch();        
     }
 
     @Override
@@ -49,7 +43,7 @@ public class AppGui extends Application {
             VBox bottomTittle = new VBox();
             Button menuButton1 = new Button("Main Menu");
             Label flightsLabel = new Label("These are the available flights");      
-            String flightsToText = App.showFlights(flights);
+            String flightsToText = App.showFlights();
             TextArea test1 = new TextArea(flightsToText);
             topTittle.getChildren().add(flightsLabel);
             centerTextField.getChildren().add(test1);
@@ -61,10 +55,10 @@ public class AppGui extends Application {
             layout2.setBottom(bottomTittle);
             Scene scene2 = new Scene(layout2, 480, 130);
             stage.setScene(scene2);
-            test1.setText(App.showFlights(flights));
+            test1.setText(App.showFlights());
             menuButton1.setOnAction(i -> stage.setScene(scene1));
         });
-
+ 
         // BOOK A FLIGHT WINDOW
         bookButton.setOnAction(e -> {
             Button menuButton2 = new Button("Main Menu");
@@ -93,8 +87,8 @@ public class AppGui extends Application {
                     toComboBox.setDisable(true);           
                     String fromToFilter = fromComboBox.getValue().toString();
                     String toToFilter = toComboBox.getValue().toString();
-                    flightsList = App.filterFlights(flights, fromToFilter, toToFilter);
-                    flightsList.forEach((f) -> options3.add(f.toString()));
+                    App.filterFlights(fromToFilter, toToFilter); // NI ENVIAMOS FLIGHTS NI CREAMOS FILTER FLIGHTS
+                    App.getFlightsList().forEach((f) -> options3.add(f.toString()));
                     layout3.getChildren().addAll(flightsComboBox,confirmBookFlightButton);
                 } else{
                     final Stage dialog = new Stage();
@@ -111,7 +105,7 @@ public class AppGui extends Application {
                
             });
            // CONFIRMED FLIGHTS POP UP WINDOW
-            confirmBookFlightButton.setOnAction(u -> {
+             confirmBookFlightButton.setOnAction(u -> {
                 final Stage dialog = new Stage();
                 VBox dialogVbox = new VBox(5);
                 dialogVbox.getChildren().add(new Label("Your flight has been successfully booked!"));
@@ -125,7 +119,7 @@ public class AppGui extends Application {
                     fromComboBox.setDisable(true);
                     toComboBox.setDisable(true);
                     String specifiedFlight = flightsComboBox.getValue().toString();
-                    App.bookFlights2(flightsList, specifiedFlight, tickets);                
+                    App.bookFlights2(specifiedFlight); //                 
                     mainMenuButton.setOnAction(f -> {
                         dialog.close();
                         stage.setScene(scene1);                            
@@ -150,7 +144,7 @@ public class AppGui extends Application {
             Scene scene3 = new Scene(layout, 340, 150);
             ObservableList<String> options = FXCollections.observableArrayList();
             ComboBox<String> flightsComboBox = new ComboBox<>(options);
-            tickets.forEach((f) -> options.add(f.toString()));
+            App.getTickets().forEach((f) -> options.add(f.toString()));
             layout.getChildren().addAll(new Label("These are your booked flights:"),flightsComboBox);
             layout.getChildren().addAll(confirmCancel,menuButton);
             confirmCancel.setOnAction(u -> {
@@ -171,8 +165,8 @@ public class AppGui extends Application {
                     String[] newTicketName = ticketName.split("@");
                     String flightID = newTicketName[0].toString().substring(16,19);
                     String seatID = newTicketName[0].toString().substring(19);
-                    App.cancelFlights(flights, flightID, seatID);    
-                    ticketEraser(tickets,ticketName);
+                    App.cancelFlights(flightID, seatID);    
+                    App.ticketEraser(ticketName);
                     final Stage dialog = new Stage();
                     VBox dialogVbox = new VBox(5);
                     dialogVbox.getChildren().add(new Label("Your flight has been successfully cancelled!"));
@@ -194,21 +188,8 @@ public class AppGui extends Application {
 
         // EXIT
         exitButton.setOnAction(e -> {
-            System.out.println(tickets);
             stage.close();
         });
-    }
-
-    public void ticketEraser(List<TicketGenerator> tickets2, String ticket){
-        int i = 0;
-        String ticketToString = "";
-        while ( i < tickets2.size()){
-            ticketToString = tickets2.get(i).toString();
-            if (ticketToString.equals(ticket)){
-                tickets2.remove(i);
-            }
-            i++;
-        }        
     }
 
 }
