@@ -90,7 +90,7 @@ public class AppGui extends Application {
                     App.filterFlights(fromToFilter, toToFilter); // NI ENVIAMOS FLIGHTS NI CREAMOS FILTER FLIGHTS
                     App.getFlightsList().forEach((f) -> options3.add(f.toString()));
                     layout3.getChildren().addAll(flightsComboBox,confirmBookFlightButton);
-                } else{
+                }else{
                     final Stage dialog = new Stage();
                     VBox dialogVbox = new VBox(5);
                     dialogVbox.getChildren().add(new Label("Please select you departure and destination!"));
@@ -115,7 +115,6 @@ public class AppGui extends Application {
                 Scene dialogScene = new Scene(dialogVbox, 250, 70);
                 String[] seatsAvailableString = flightsComboBox.getValue().split("Seats available: ");
                 int seatsAvailable = Integer.valueOf(seatsAvailableString[1]);
-                System.out.println(seatsAvailable);
                 if (flightsComboBox.getValue() != null && seatsAvailable > 0){
                     dialog.setScene(dialogScene);
                     dialog.show();
