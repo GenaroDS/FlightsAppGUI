@@ -37,6 +37,9 @@ public class AppGui extends Application {
         layout1.setAlignment(Pos.BASELINE_CENTER);
         layout1.getChildren().addAll(welcomeLabel,showButton,bookButton,cancelButton, exitButton);
         Scene scene1 = new Scene(layout1, 320, 240);
+        stage.setTitle("FlightsApp");
+        stage.setScene(scene1);
+        stage.show();
 
         // SHOW FLIGHTS WINDOW
         showButton.setOnAction(e -> {
@@ -194,13 +197,6 @@ public class AppGui extends Application {
             System.out.println(tickets);
             stage.close();
         });
-        
-
-        // FUNCTIONALITIES        
-
-        stage.setTitle("FlightsApp");
-        stage.setScene(scene1);
-        stage.show();
 
     }
 

@@ -50,5 +50,4 @@ public class TicketGenerator {
     public String toString(){
         return "Ticket Number: #" + this.ticket + "@" + this.from + "->"+ this.to + " Airline: " + this.airline;
     }
-
 }
