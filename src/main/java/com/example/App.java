@@ -2,6 +2,11 @@ package com.example;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+
 public class App {
     private static List<Airplane> flights;
     private static List<Airplane> flightsList;
@@ -104,6 +109,31 @@ public class App {
             i++;
         }        
     }
+
+    public static String dialogBoxProcessing(ComboBox<String> comboBoxValue, VBox dialogVBox){
+        if (comboBoxValue.getValue() == null){
+            dialogVBox.getChildren().clear();
+            Button closeButton = new Button("Close");
+            dialogVBox.getChildren().addAll(new Label("Please select your desired flight!"), closeButton);
+            return "A" ;
+        }
+        String[] seatsAvailableString = comboBoxValue.getValue().split("Seats available: ");
+        int seatsAvailable = Integer.parseInt(seatsAvailableString[1]);
+        if (seatsAvailable == 0){
+            dialogVBox.getChildren().clear();            
+            dialogVBox.getChildren().addAll(new Label("The selected flight has no seats availables."));
+            return "B";
+        }
+        if (comboBoxValue.getValue() != null && seatsAvailable > 0){
+            dialogVBox.getChildren().add(new Label("Your flight has been successfully booked!"));
+            Button mainMenuButton = new Button("Main Menu");
+            dialogVBox.getChildren().add(mainMenuButton);
+            return "C";
+        }
+        return "D";
+
+    }
+
 
 }
 
