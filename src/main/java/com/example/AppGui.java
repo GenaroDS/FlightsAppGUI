@@ -26,7 +26,7 @@ public class AppGui extends Application {
         Button bookButton = new Button("Book a flight");
         Button cancelButton = new Button("Cancel a flight");
         Button exitButton = new Button("Exit Application");
-        VBox layout1 =new VBox(20);
+        VBox layout1 = new VBox(20);
         layout1.setAlignment(Pos.BASELINE_CENTER);
         layout1.getChildren().addAll(welcomeLabel, showButton, bookButton, cancelButton, exitButton);
         Scene scene = new Scene(layout1, 320, 240);
@@ -36,12 +36,12 @@ public class AppGui extends Application {
 
         // SHOW FLIGHTS WINDOW
         showButton.setOnAction(e -> {
-            BorderPane layout2 =new BorderPane();
+            BorderPane layout2 = new BorderPane();
             VBox topTittle = new VBox();
             StackPane centerTextField = new StackPane();
             VBox bottomTittle = new VBox();
             Button menuButton1 = new Button("Main Menu");
-            Label flightsLabel = new Label("These are the available flights");      
+            Label flightsLabel = new Label("These are the available flights");
             String flightsToText = App.showFlights();
             TextArea test1 = new TextArea(flightsToText);
             topTittle.getChildren().add(flightsLabel);
@@ -57,7 +57,7 @@ public class AppGui extends Application {
             test1.setText(App.showFlights());
             menuButton1.setOnAction(i -> stage.setScene(scene));
         });
- 
+
         // BOOK A FLIGHT WINDOW
         bookButton.setOnAction(e -> {
             Button menuButton2 = new Button("Main Menu");
@@ -66,30 +66,30 @@ public class AppGui extends Application {
             layout3.getChildren().addAll(bookLabel, menuButton2);
             layout3.setAlignment(Pos.BASELINE_CENTER);
             Scene scene3 = new Scene(layout3, 320, 330);
-            ComboBox<String> fromComboBox = new ComboBox<>(FXCollections.observableArrayList("ROS","BAS"));
-            ComboBox<String> toComboBox = new ComboBox<>(FXCollections.observableArrayList("BCN","MDR"));
-            layout3.getChildren().addAll(new Label("From:"),fromComboBox,new Label("To:"),toComboBox);
+            ComboBox<String> fromComboBox = new ComboBox<>(FXCollections.observableArrayList("ROS", "BAS"));
+            ComboBox<String> toComboBox = new ComboBox<>(FXCollections.observableArrayList("BCN", "MDR"));
+            layout3.getChildren().addAll(new Label("From:"), fromComboBox, new Label("To:"), toComboBox);
             Button showFlightsButton = new Button("See available flights");
             Button confirmBookFlightButton = new Button("Book selected flight");
             layout3.getChildren().addAll(showFlightsButton);
             ObservableList<String> options3 = FXCollections.observableArrayList();
-            ComboBox<String> flightsComboBox = new ComboBox<>(options3);    
+            ComboBox<String> flightsComboBox = new ComboBox<>(options3);
             stage.setScene(scene3);
             menuButton2.setOnAction(i -> stage.setScene(scene));
             // BOOK THE FLIGHT FUNCTIONALITY
             showFlightsButton.setOnAction(o -> {
                 // CHECK IF COMBOBOXES HAVE VALUE, ELSE POP-UP WINDOW
-                if ((fromComboBox.getValue() != null) && (toComboBox.getValue() != null)){
+                if ((fromComboBox.getValue() != null) && (toComboBox.getValue() != null)) {
                     layout3.getChildren().add(new Label("These are the available flights:"));
-                    showFlightsButton.setDisable(true);  
-                    fromComboBox.setDisable(true);   
-                    toComboBox.setDisable(true);           
+                    showFlightsButton.setDisable(true);
+                    fromComboBox.setDisable(true);
+                    toComboBox.setDisable(true);
                     String fromToFilter = fromComboBox.getValue().toString();
                     String toToFilter = toComboBox.getValue().toString();
                     App.filterFlights(fromToFilter, toToFilter); // NI ENVIAMOS FLIGHTS NI CREAMOS FILTER FLIGHTS
                     App.getFlightsList().forEach((f) -> options3.add(f.toString()));
-                    layout3.getChildren().addAll(flightsComboBox,confirmBookFlightButton);
-                }else{
+                    layout3.getChildren().addAll(flightsComboBox, confirmBookFlightButton);
+                } else {
                     final Stage dialog = new Stage();
                     VBox dialogVbox = new VBox(5);
                     dialogVbox.getChildren().add(new Label("Please select you departure and destination!"));
@@ -99,58 +99,58 @@ public class AppGui extends Application {
                     Scene dialogScene = new Scene(dialogVbox, 250, 70);
                     dialog.setScene(dialogScene);
                     dialog.show();
-                    confirm.setOnAction(i ->dialog.close());
+                    confirm.setOnAction(i -> dialog.close());
                 }
-               
-            });
-           // CONFIRMED FLIGHTS POP UP WINDOW
-           confirmBookFlightButton.setOnAction(u -> {
-            final Stage dialog = new Stage();
-            VBox dialogVbox = new VBox(5);
-            dialogVbox.getChildren().add(new Label("Your flight has been successfully booked!"));
-            Button mainMenuButton = new Button("Main Menu");
-            dialogVbox.getChildren().add(mainMenuButton);
-            dialogVbox.setAlignment(Pos.BASELINE_CENTER);
-            Scene dialogScene = new Scene(dialogVbox, 250, 70);
-            String[] seatsAvailableString = flightsComboBox.getValue().split("Seats available: ");
-            int seatsAvailable = Integer.valueOf(seatsAvailableString[1]);
-            if (flightsComboBox.getValue() != null && seatsAvailable > 0){
-                dialog.setScene(dialogScene);
-                dialog.show();
-                fromComboBox.setDisable(true);
-                toComboBox.setDisable(true);
-                String specifiedFlight = flightsComboBox.getValue().toString();
-                App.bookFlights(specifiedFlight); //                 
-                mainMenuButton.setOnAction(f -> {
-                    dialog.close();
-                    stage.setScene(scene);                            
-                });
-            } else if (seatsAvailable == 0){
-                dialogVbox.getChildren().clear();
-                Button closeButton = new Button("Close");
-                dialogVbox.getChildren().addAll(new Label("The selected flight has no seats avaiables."), closeButton);
-                dialog.setScene(dialogScene);   
-                dialog.show();
-                closeButton.setOnAction(f ->{
-                    dialog.close();
-                    stage.setScene(scene);
-                }); 
-            }
-            else {
-                dialogVbox.getChildren().clear();
-                Button closeButton = new Button("Close");
-                dialogVbox.getChildren().addAll(new Label("Please select your desired flight!"), closeButton);
-                dialog.setScene(dialogScene);
-                dialog.show();
-                closeButton.setOnAction(f -> dialog.close());
-            }
-        });
-        });
 
-        
+            });
+            // CONFIRMED FLIGHTS POP UP WINDOW
+            confirmBookFlightButton.setOnAction(u -> {
+                final Stage dialog = new Stage();
+                VBox dialogVbox = new VBox(5);
+                dialogVbox.getChildren().add(new Label("Your flight has been successfully booked!"));
+                Button mainMenuButton = new Button("Main Menu");
+                dialogVbox.getChildren().add(mainMenuButton);
+                dialogVbox.setAlignment(Pos.BASELINE_CENTER);
+                Scene dialogScene = new Scene(dialogVbox, 250, 70);
+                int seatsAvailable = -1;
+                try {
+                    String[] seatsAvailableString = flightsComboBox.getValue().split("Seats available: ");
+                    seatsAvailable = Integer.valueOf(seatsAvailableString[1]);
+                } catch (Exception l) {
+                    dialogVbox.getChildren().clear();
+                    Button closeButton = new Button("Close");
+                    dialogVbox.getChildren().addAll(new Label("Please select your desired flight!"), closeButton);
+                    dialog.setScene(dialogScene);
+                    dialog.show();
+                    closeButton.setOnAction(f -> dialog.close());
+                }
+                if (seatsAvailable > 0) {
+                    dialog.setScene(dialogScene);
+                    dialog.show();
+                    fromComboBox.setDisable(true);
+                    toComboBox.setDisable(true);
+                    String specifiedFlight = flightsComboBox.getValue().toString();
+                    App.bookFlights(specifiedFlight); //
+                    mainMenuButton.setOnAction(f -> {
+                        dialog.close();
+                        stage.setScene(scene);
+                    });
+                } else if (seatsAvailable == 0) {
+                    dialogVbox.getChildren().clear();
+                    Button closeButton = new Button("Close");
+                    dialogVbox.getChildren().addAll(new Label("The selected flight has no seats availables."),closeButton);
+                    dialog.setScene(dialogScene);
+                    dialog.show();
+                    closeButton.setOnAction(f -> {
+                        dialog.close();
+                        stage.setScene(scene);
+                    });
+                }
+            });
+        });
 
         // CANCEL A FLIGHT WINDOW
-        cancelButton.setOnAction(e ->{
+        cancelButton.setOnAction(e -> {
             Button menuButton = new Button("Main Menu");
             Button confirmCancel = new Button("Cancel selected flight");
             VBox layout4 = new VBox(10);
@@ -159,28 +159,15 @@ public class AppGui extends Application {
             ObservableList<String> options = FXCollections.observableArrayList();
             ComboBox<String> flightsComboBox = new ComboBox<>(options);
             App.getTickets().forEach((f) -> options.add(f.toString()));
-            layout4.getChildren().addAll(new Label("These are your booked flights:"),flightsComboBox);
-            layout4.getChildren().addAll(confirmCancel,menuButton);
+            layout4.getChildren().addAll(new Label("These are your booked flights:"), flightsComboBox);
+            layout4.getChildren().addAll(confirmCancel, menuButton);
             confirmCancel.setOnAction(u -> {
-                // CHECK IF THERE'S A SELECTED VALUE, IF THERE'S NOT, DIALOG WINDOW WILL POP UP
-            if (flightsComboBox.getValue() == null){
-                    final Stage dialog = new Stage();
-                    VBox dialogVbox = new VBox(5);
-                    dialogVbox.getChildren().add(new Label("Please select a ticket to cancel"));
-                    Button closeButton = new Button("Close");
-                    dialogVbox.getChildren().add(closeButton);
-                    dialogVbox.setAlignment(Pos.BASELINE_CENTER);
-                    Scene dialogScene = new Scene(dialogVbox, 250, 70);
-                    dialog.setScene(dialogScene);
-                    dialog.show();
-                    closeButton.setOnAction(f -> dialog.close());
-                }
-            else{// IF THERE'S IS A VALUE, CENCEL THE TICKET
+                try {
                     String ticketName = flightsComboBox.getValue();
                     String[] newTicketName = ticketName.split("@");
-                    String flightID = newTicketName[0].toString().substring(16,19);
+                    String flightID = newTicketName[0].toString().substring(16, 19);
                     String seatID = newTicketName[0].toString().substring(19);
-                    App.cancelFlights(flightID, seatID);    
+                    App.cancelFlights(flightID, seatID);
                     App.ticketEraser(ticketName);
                     final Stage dialog = new Stage();
                     VBox dialogVbox = new VBox(5);
@@ -193,9 +180,22 @@ public class AppGui extends Application {
                     dialog.show();
                     mainMenu.setOnAction(a -> {
                         dialog.close();
-                        stage.setScene(scene);                    
+                        stage.setScene(scene);
                     });
+                } catch (Exception p){
+                    final Stage dialog = new Stage();
+                    VBox dialogVbox = new VBox(5);
+                    dialogVbox.getChildren().add(new Label("Please select a ticket to cancel"));
+                    Button closeButton = new Button("Close");
+                    dialogVbox.getChildren().add(closeButton);
+                    dialogVbox.setAlignment(Pos.BASELINE_CENTER);
+                    Scene dialogScene = new Scene(dialogVbox, 250, 70);
+                    dialog.setScene(dialogScene);
+                    dialog.show();
+                    closeButton.setOnAction(f -> dialog.close());
                 }
+                // CHECK IF THERE'S A SELECTED VALUE, IF THERE'S NOT, DIALOG WINDOW WILL POP UP
+                
             });
             stage.setScene(scene3);
             menuButton.setOnAction(i -> stage.setScene(scene));
